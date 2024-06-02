@@ -335,3 +335,8 @@ INSERT INTO station_tbl (station) VALUES
 >[!NOTE]
 Создание контейнеров выполняется из проекта **auth-service** командой  
 ***docker-compose up***
+
+## Postman
+В файле ***postman/collection.postman_collection.json*** представлена коллекция запросов для Postman, охватывающая все API.
+> [!IMPORTANT]  
+Перед запуском коллекции необходимо создать среду в Postman и добавить туда переменную **token** типа **default**.
