@@ -261,3 +261,77 @@ Session ( сессия авторизации )
     - Успешное завершение операции (200)
     - Не удается определить заказ по id (400)
 ---
+
+## СУБД
+Используемая СУБД для обоих микросервисов: H2  
+> [!NOTE]  
+> spring.jpa.hibernate.ddl-auto=none
+
+H2 Запросы на создание и заполнение баз данных:  
+**Auth-service:**
+~~~sql
+CREATE TABLE IF NOT EXISTS user_tbl (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nickname VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS session_tbl (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ user_id INT NOT NULL,
+ token VARCHAR(255) NOT NULL,
+ expires TIMESTAMP NOT NULL,
+ FOREIGN KEY (user_id) REFERENCES user_tbl(id)
+);
+
+INSERT INTO user_tbl (nickname, email, password) VALUES
+ ('Dan', 'Dan@gmail.com', 'DanPassword'),
+ ('Kate', 'Kate@gmail.com', 'KatePassword'),
+ ('Alex', 'Alex@gmail.com', 'AlexPassword');
+
+~~~
+***Ticket-service:***
+~~~sql
+CREATE TABLE IF NOT EXISTS station_tbl (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ station VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS order_tbl (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   user_id INT NOT NULL,
+   from_station_id INT NOT NULL,
+   to_station_id INT NOT NULL,
+   status INT NOT NULL,
+   created TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+INSERT INTO station_tbl (station) VALUES
+ ('Moscow'),
+ ('Tokio'),
+ ('Shanghai'),
+ ('London'),
+ ('Berlin')
+~~~
+
+## Swagger
+> [!TIP]  
+> Документация для auth-service и ticket-service доступна по адресам http://localhost:9000/swagger-ui/index.html и http://localhost:9001/swagger-ui/index.html соответственно.
+
+## Docker
+Проект auth-service содержит Dockerfile и compose.yaml  
+Проект ticket-service содержит Dockerfile
+
+> [!NOTE]
+Создание образа auth-service выполняется командой  
+***docker build -t auth-service .***
+
+>[!NOTE]
+Создание образа ticket-service выполняется командой  
+***docker build -t ticket-service .***
+
+>[!NOTE]
+Создание контейнеров выполняется из проекта **auth-service** командой  
+***docker-compose up***
