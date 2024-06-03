@@ -237,7 +237,9 @@ Session ( сессия авторизации )
 
     **Возврат:** String ( сообщение об успехе / текст ошибки )
 
-    Создание заказа на покупку билета
+    Создание заказа на покупку билета. Проверка токена происходит через эндпоинт в сервисе авторизации.
+    > [!NOTE]
+    > Микросервис ticket-service общается с auth-service через RestTemplate
 
     **Статусы:**
     - Успешное завершение операции (200)
@@ -317,22 +319,22 @@ INSERT INTO station_tbl (station) VALUES
 ~~~
 
 ## Swagger
-> [!TIP]  
+> [!NOTE]  
 > Документация для auth-service и ticket-service доступна по адресам http://localhost:9000/swagger-ui/index.html и http://localhost:9001/swagger-ui/index.html соответственно.
 
 ## Docker
 Проект auth-service содержит Dockerfile и compose.yaml  
 Проект ticket-service содержит Dockerfile
 
-> [!NOTE]
+> [!TIP]
 Создание образа auth-service выполняется командой  
 ***docker build -t auth-service .***
 
->[!NOTE]
+>[!TIP]
 Создание образа ticket-service выполняется командой  
 ***docker build -t ticket-service .***
 
->[!NOTE]
+>[!TIP]
 Создание контейнеров выполняется из проекта **auth-service** командой  
 ***docker-compose up***
 
@@ -340,3 +342,11 @@ INSERT INTO station_tbl (station) VALUES
 В файле ***postman/collection.postman_collection.json*** представлена коллекция запросов для Postman, охватывающая все API.
 > [!IMPORTANT]  
 Перед запуском коллекции необходимо создать среду в Postman и добавить туда переменную **token** типа **default**.
+
+## Используемые библиотеки / фреймворки / зависимости
+- Spring Web
+- Spring Data JPA
+- H2 Database
+- Lombok
+- SpringDoc OpenAPi
+- Java JWT
