@@ -1,0 +1,18 @@
+networks:
+  back-tier:
+
+services:
+  auth:
+    image: auth-service
+    networks:
+      - back-tier
+    ports:
+      - "9000:9000"
+  ticket:
+    image: ticket-service
+    networks:
+      - back-tier
+    ports:
+      - "9001:9001"
+    depends_on:
+      - auth
